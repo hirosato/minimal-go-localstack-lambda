@@ -2,17 +2,25 @@ package main
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-type MyEvent struct {
-	Name string `json:"name"`
+type Result struct {
+	IsBase64Encoded bool              `json:"isBase64Encoded"`
+	Body            string            `json:"body"`
+	HttpStatusCode  int               `json:"statusCode"`
+	Headers         map[string]string `json:"headers"`
 }
 
-func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
-	return fmt.Sprintf("Hello %s!", name.Name), nil
+func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (Result, error) {
+	result := Result{
+		IsBase64Encoded: false,
+		Body:            "Pong",
+		HttpStatusCode:  200,
+	}
+	return result, nil
 }
 
 func main() {
